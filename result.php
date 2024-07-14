@@ -1,4 +1,5 @@
-<?php //@todo start PHP session ?>
+<?php 
+session_start() ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,16 +16,33 @@
 <body>
     <?php include '_navbar.php' ?>
     <main class="container">
-        <?php //@todo display contact form data ?>
-        <h1>Thank you for your message!</h1>
+        <?php //@todo display contact form data
+        $contact = $_SESSION['contact'] ?? null;
+
+        if ($contact === null) {
+            header('Location: index.php');
+            exit();
+        }
+        
+        $name = htmlspecialchars($contact['name']);
+        $email = htmlspecialchars($contact['email']);
+        $subject = htmlspecialchars($contact['subject']);
+        $message = htmlspecialchars($contact['message']); ?>
+        <h1>Thank you for your message <?= $name ?> !</h1>
         <p>
             Your message is being processed.
             <br>
-            Our team will get back to you within 48 hours.
+            Our team will get back to you within 48 hours at <?= $email ?>.
         </p>
         <p>
             Have a nice day and see you soon 🙂
         </p>
+
+        <h2>You've contacted us for:</h2>
+        <ul>
+            <li><span style="font-weight: bold;">Subject: </span> <?= $subject ?></li>
+            <li><span style="font-weight: bold;"> Message: </span>  <?= $message ?></li>
+        </ul>
     </main>
     <?php include '_footer.php' ?>
 </body>
